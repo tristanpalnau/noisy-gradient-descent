@@ -29,6 +29,21 @@ Gradient descent moves by subtracting a step size times the gradient. At any poi
 
 Without noise (σ = 0), the iterate never leaves x = 0. With noise, each tenfold increase in σ saves only about 60 steps. Once noise nudges x away from 0, the true gradient takes over and pushes it away quickly, so the size of the first nudge matters relatively little.
 
+## Related: step size on a 2D quadratic (no noise)
+
+`step-size-2d/pilot.py` runs plain gradient descent on f(x, y) = (x − 1)² + 4(y + 2)², starting at (2, 0), to see how step size interacts with curvature that differs by direction. Each step multiplies the distance to the minimum (1, −2) by 1 − 2α in x and 1 − 8α in y, so the steep y direction is stable only when α < 0.25.
+
+| Step size α | x factor | y factor | Steps until gradient < 10⁻⁶ (cap 200) |
+|---|---|---|---|
+| 0.02 | 0.96 | 0.84 | not reached in 200 steps |
+| 0.1 | 0.80 | 0.20 | 66 |
+| 0.2 | 0.60 | −0.60 | 33 (y overshoots back and forth) |
+| 0.3 | 0.40 | −1.40 | diverges in y |
+
+![Gradient descent paths for four step sizes](step-size-2d/gd_paths.png)
+
+This noise-free run is the baseline for the planned noisy version of the same function.
+
 ## Run it
 
 ```
@@ -36,7 +51,7 @@ pip install -r requirements.txt
 python research.py
 ```
 
-Prints the four medians and saves `my_pilot_figure.png`.
+Prints the four medians and saves `my_pilot_figure.png`. For the 2D step-size run: `cd step-size-2d && python pilot.py` (prints the table above and saves `gd_paths.png`).
 
 ## Next steps
 
